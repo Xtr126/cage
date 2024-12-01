@@ -142,7 +142,7 @@ if conf_data.get('CAGE_HAS_XWAYLAND', 0) == 1
 endif
 
 executable(
-  meson.project_name(),
+  'cage_xtmapper',
   cage_sources + cage_headers,
   dependencies: [
     server_protos,
