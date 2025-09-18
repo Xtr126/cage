@@ -255,6 +255,22 @@ handle_output_destroy(struct wl_listener *listener, void *data)
 	output_destroy(output);
 }
 
+static size_t parse_size_env(const char *name) {
+	const char *size_str = getenv(name);
+	if (size_str == NULL) {
+		return 0;
+	}
+
+	char *end;
+	int size = (int)strtol(size_str, &end, 10);
+	if (*end || size < 0) {
+		wlr_log(WLR_ERROR, "%s specified with invalid integer, ignoring", name);
+		return 0;
+	}
+
+	return size;
+}
+
 void
 handle_new_output(struct wl_listener *listener, void *data)
 {
@@ -324,6 +340,14 @@ handle_new_output(struct wl_listener *listener, void *data)
 		wlr_log(WLR_ERROR, "Cannot load XCursor theme for output '%s' with scale %f", wlr_output->name,
 			wlr_output->scale);
 	}
+
+	size_t width = parse_size_env("XTMAPPER_WIDTH");
+	size_t height = parse_size_env("XTMAPPER_HEIGHT");
+	size_t refresh = parse_size_env("XTMAPPER_REFRESH");
+
+	if (width > 0 && height > 0 && refresh > 0) wlr_output_state_set_custom_mode(&state, width, height, refresh);
+	else if (width > 0 && height > 0) wlr_output_state_set_custom_mode(&state, width, height, 0);
+	else if (refresh > 0) wlr_output_state_set_custom_mode(&state, wlr_output->width, wlr_output->height, refresh);
 
 	wlr_log(WLR_DEBUG, "Enabling new output %s", wlr_output->name);
 	if (wlr_output_commit_state(wlr_output, &state)) {
