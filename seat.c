@@ -626,6 +626,15 @@ handle_cursor_axis(struct wl_listener *listener, void *data)
 	}
 }
 
+static const char* button_to_string(int button) {
+    switch (button) {
+        case BTN_LEFT:   return "BTN_LEFT";
+        case BTN_RIGHT:  return "BTN_RIGHT";
+        case BTN_MIDDLE: return "BTN_MIDDLE";
+        default:         return "UNKNOWN";
+    }
+}
+
 static void
 handle_cursor_button(struct wl_listener *listener, void *data)
 {
@@ -639,7 +648,7 @@ handle_cursor_button(struct wl_listener *listener, void *data)
 		wlr_idle_notifier_v1_notify_activity(seat->server->idle, seat->seat);
 	} else {
 		int action = event->state == WL_POINTER_BUTTON_STATE_PRESSED ? 1 : 0;
-		const char *code = event->button == BTN_LEFT ? "BTN_LEFT" : "BTN_RIGHT";
+		const char *code = button_to_string(event->button);
 		printf("/dev/input/wl_pointer_button: EV_KEY %s %d\n", code, action);
 	}
 }
