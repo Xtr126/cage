@@ -35,7 +35,12 @@ if is_freebsd
   )
 endif
 
-wlroots        = dependency('wlroots-0.20', fallback: ['wlroots', 'wlroots'])
+wlroots_proj = subproject(
+  'wlroots',
+  default_options: ['examples=false', 'xwayland=disabled'],
+)
+
+wlroots        = wlroots_proj.get_variable('wlroots')
 wayland_server = dependency('wayland-server')
 xkbcommon      = dependency('xkbcommon')
 math           = cc.find_library('m')
