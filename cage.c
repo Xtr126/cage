@@ -294,7 +294,7 @@ parse_args(struct cg_server *server, int argc, char *argv[])
 int
 main(int argc, char *argv[])
 {
-	struct cg_server server = {.log_level = WLR_INFO};
+	struct cg_server server = {.log_level = WLR_ERROR};
 	struct wl_event_source *sigchld_source = NULL;
 	pid_t pid = 0;
 	int ret = 0, app_ret = 0;
