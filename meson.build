@@ -40,7 +40,6 @@ wlroots_proj = subproject(
   default_options: [
     'examples=false',
     'xwayland=disabled',
-    'buildtype=' + get_option('buildtype'),
   ],
 )
 
